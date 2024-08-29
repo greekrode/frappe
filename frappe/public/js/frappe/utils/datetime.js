@@ -166,6 +166,29 @@ $.extend(frappe.datetime, {
 		}
 	},
 
+	str_to_user_custom: function (val, only_time = false, only_date = false) {
+		if (!val) return "";
+		const user_date_fmt = "DD MMM YYYY"
+		const user_time_fmt = frappe.datetime.get_user_time_fmt();
+		let user_format = user_time_fmt;
+
+		if (only_time) {
+			let date_obj = moment(val, frappe.defaultTimeFormat);
+			return date_obj.format(user_format);
+		} else if (only_date) {
+			let date_obj = moment(val, frappe.defaultDateFormat);
+			return date_obj.format(user_date_fmt);
+		} else {
+			let date_obj = moment.tz(val, frappe.boot.time_zone.system);
+			if (typeof val !== "string" || val.indexOf(" ") === -1) {
+				user_format = user_date_fmt;
+			} else {
+				user_format = user_date_fmt + " " + user_time_fmt;
+			}
+			return date_obj.clone().tz(frappe.boot.time_zone.user).format(user_format);
+		}
+	},
+
 	get_datetime_as_string: function (d) {
 		return moment(d).format("YYYY-MM-DD HH:mm:ss");
 	},
