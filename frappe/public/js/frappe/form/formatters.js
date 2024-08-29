@@ -12,7 +12,7 @@ frappe.form.formatters = {
 		if (options && (options.inline || options.only_value)) {
 			return value;
 		} else {
-			return "<div style='text-align: right'>" + value + "</div>";
+			return "<div style='text-align: right; white-space: nowrap;'>" + value + "</div>"; 
 		}
 	},
 	_apply_custom_formatter: function (value, df) {
